@@ -8,7 +8,7 @@ FONT_DIR = Path(__file__).parent / "fonts"
 
 X_START    = int(CANVAS[0] * 0.06)          # 65px — left margin (safe from Instagram chrome)
 TEXT_WIDTH = int(CANVAS[0] * 0.55)          # 594px — text wraps before 61% mark
-Y_START    = int(CANVAS[1] * 0.20)          # 384px — top margin
+Y_START    = int(CANVAS[1] * 0.15)          # 288px — top margin
 
 
 def _load_font(filename: str, size: int) -> ImageFont.FreeTypeFont:
