@@ -82,20 +82,29 @@ def _draw_qa_overlay(
 
     is_hindi = bool(re.search(r"[ऀ-ॿ]", quote))
     if is_hindi:
-        font_me      = _load_font("NotoSansDevanagari.ttf", 38)
-        font_krishna = _load_font("NotoSansDevanagari.ttf", 38)
+        font_bold    = _load_font("NotoSansDevanagari.ttf", 38)
+        font_regular = _load_font("NotoSansDevanagari.ttf", 38)
     else:
-        font_me      = _load_font("Lato-Bold.ttf", 38)
-        font_krishna = _load_font("PlayfairDisplay-Bold.ttf", 38)
+        font_bold    = _load_font("Lato-Bold.ttf", 38)
+        font_regular = _load_font("Lato-Light.ttf", 38)
 
     y = Y_START
 
+    # ME line — uppercase label, bold throughout
     if me_line:
-        y = _draw_text_block(d, me_line, font_me, font_color, shadow_color, y, line_height=52)
+        me_text = re.sub(r"^Me:\s*", "ME: ", me_line, flags=re.IGNORECASE)
+        y = _draw_text_block(d, me_text, font_bold, font_color, shadow_color, y, line_height=52)
         y += 28
 
+    # KRISHNA line — uppercase label bold on its own line, body text in regular weight
     if krishna_line:
-        _draw_text_block(d, krishna_line, font_krishna, font_color, shadow_color, y, line_height=52)
+        krishna_body = re.sub(r"^Krishna:\s*", "", krishna_line, flags=re.IGNORECASE)
+        # Draw "KRISHNA:" label bold
+        d.text((X_START + 2, y + 2), "KRISHNA:", font=font_bold, fill=shadow_color)
+        d.text((X_START, y), "KRISHNA:", font=font_bold, fill=font_color)
+        y += 52
+        # Draw body text in regular weight
+        _draw_text_block(d, krishna_body, font_regular, font_color, shadow_color, y, line_height=52)
 
 
 def make_gradient_bg() -> Image.Image:

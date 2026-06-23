@@ -86,11 +86,16 @@ def main():
             skipped += 1
             continue
 
+        # Use folder + filename separately so Cloudinary creates folder objects
+        folder_path = str(Path(public_id).parent).replace("\\", "/")
+        filename    = Path(public_id).stem
+
         print(f"  UP    {rel} ...", end=" ", flush=True)
         try:
             cloudinary.uploader.upload(
                 str(img_path),
-                public_id=public_id,
+                public_id=filename,
+                folder=folder_path,
                 resource_type="image",
                 overwrite=True,
             )
