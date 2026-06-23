@@ -11,7 +11,7 @@ def _clean(val: str) -> str:
 GEMINI_API_KEY      = _clean(os.getenv("GEMINI_API_KEY", ""))
 GROQ_API_KEY        = _clean(os.getenv("GROQ_API_KEY", ""))
 INSTAGRAM_USERNAME  = _clean(os.getenv("INSTAGRAM_USERNAME", ""))
-POST_INTERVAL_HOURS = int(os.getenv("POST_INTERVAL_HOURS", "1"))
+POST_INTERVAL_HOURS = int(os.getenv("POST_INTERVAL_HOURS", "2"))
 
 IG_USER_ID      = _clean(os.getenv("IG_USER_ID", ""))
 IG_ACCESS_TOKEN = _clean(os.getenv("IG_ACCESS_TOKEN", ""))

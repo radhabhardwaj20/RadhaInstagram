@@ -2,7 +2,7 @@ name: Post to Instagram
 
 on:
   schedule:
-    - cron: '*/30 * * * *'  # every 30 minutes
+    - cron: '0 */2 * * *'  # every 2 hours
   workflow_dispatch:        # manual trigger from GitHub UI
 
 jobs:
@@ -28,21 +28,14 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Download fonts
-        run: python setup.py
-
       - name: Run pipeline
         env:
           GEMINI_API_KEY:           ${{ secrets.GEMINISECRET }}
           GROQ_API_KEY:             ${{ secrets.GROKSECRET }}
-          HF_API_TOKEN:             ${{ secrets.HFSECRET }}
           INSTAGRAM_USERNAME:       ${{ secrets.INSTAUSERNAMESECRET }}
-          QUOTE_CATEGORY:           "mindset,growth,love,resilience,courage,success,peace,wisdom"
-          POST_INTERVAL_HOURS:      "1"
           IG_USER_ID:               ${{ secrets.IGUSERIDSECRET }}
           IG_ACCESS_TOKEN:          ${{ secrets.IGACCESSTOKENSECRET }}
           IG_APP_SECRET:            ${{ secrets.IGAPPSECRET }}
-          IMGBB_API_KEY:            ${{ secrets.IMGBBKEYSECRET }}
           CLOUDINARY_CLOUD_NAME:    ${{ secrets.CLOUDINARYNAME }}
           CLOUDINARY_API_KEY:       ${{ secrets.CLOUDINARYKEY }}
           CLOUDINARY_API_SECRET:    ${{ secrets.CLOUDINARYSECRET }}
@@ -52,5 +45,5 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add mood_history.json music_history.json template_history.json || true
+          git add category_history.json audio_history.json template_history.json || true
           git diff --cached --quiet || (git commit -m "chore: update history after run [skip ci]" && git push)
