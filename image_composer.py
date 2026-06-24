@@ -8,7 +8,7 @@ FONT_DIR = Path(__file__).parent / "fonts"
 
 X_START    = int(CANVAS[0] * 0.06)          # 65px — left margin (safe from Instagram chrome)
 TEXT_WIDTH = int(CANVAS[0] * 0.55)          # 594px — text wraps before 61% mark
-Y_START    = int(CANVAS[1] * 0.15)          # 288px — top margin
+Y_START    = int(CANVAS[1] * 0.12)          # 230px — top margin
 
 
 def _load_font(filename: str, size: int) -> ImageFont.FreeTypeFont:
@@ -81,30 +81,51 @@ def _draw_qa_overlay(
     krishna_line = parts[1].strip() if len(parts) > 1 else ""
 
     is_hindi = bool(re.search(r"[ऀ-ॿ]", quote))
-    if is_hindi:
-        font_bold    = _load_font("NotoSansDevanagari.ttf", 38)
-        font_regular = _load_font("NotoSansDevanagari.ttf", 38)
-    else:
-        font_bold    = _load_font("Lato-Bold.ttf", 38)
-        font_regular = _load_font("Lato-Light.ttf", 38)
+    font_bold = _load_font("NotoSansDevanagari.ttf" if is_hindi else "Lato-Bold.ttf", 38)
 
     y = Y_START
 
-    # ME line — uppercase label, bold throughout
+    # ME line — uppercase, bold
     if me_line:
         me_text = re.sub(r"^Me:\s*", "ME: ", me_line, flags=re.IGNORECASE)
         y = _draw_text_block(d, me_text, font_bold, font_color, shadow_color, y, line_height=52)
         y += 28
 
-    # KRISHNA line — uppercase label bold on its own line, body text in regular weight
+    # KRISHNA line — "KRISHNA:" bold inline, body text continues on same line then wraps
     if krishna_line:
         krishna_body = re.sub(r"^Krishna:\s*", "", krishna_line, flags=re.IGNORECASE)
-        # Draw "KRISHNA:" label bold
-        d.text((X_START + 2, y + 2), "KRISHNA:", font=font_bold, fill=shadow_color)
-        d.text((X_START, y), "KRISHNA:", font=font_bold, fill=font_color)
-        y += 52
-        # Draw body text in regular weight
-        _draw_text_block(d, krishna_body, font_regular, font_color, shadow_color, y, line_height=52)
+        label = "KRISHNA: "
+        label_w = d.textbbox((0, 0), label, font=font_bold)[2]
+
+        # Word-wrap body: first line has less space (label takes some), rest full width
+        words = krishna_body.split()
+        lines: list[str] = []
+        current = ""
+        first = True
+        for word in words:
+            test = (current + " " + word).strip()
+            max_w = TEXT_WIDTH - label_w if first else TEXT_WIDTH
+            if d.textbbox((0, 0), test, font=font_bold)[2] <= max_w:
+                current = test
+            else:
+                if current:
+                    lines.append(current)
+                    first = False
+                current = word
+        if current:
+            lines.append(current)
+
+        # Draw label + first body line on same row
+        d.text((X_START + 2, y + 2), label, font=font_bold, fill=shadow_color)
+        d.text((X_START, y), label, font=font_bold, fill=font_color)
+        if lines:
+            d.text((X_START + label_w + 2, y + 2), lines[0], font=font_bold, fill=shadow_color)
+            d.text((X_START + label_w, y), lines[0], font=font_bold, fill=font_color)
+        # Draw remaining lines at normal X_START
+        for line in lines[1:]:
+            y += 52
+            d.text((X_START + 2, y + 2), line, font=font_bold, fill=shadow_color)
+            d.text((X_START, y), line, font=font_bold, fill=font_color)
 
 
 def make_gradient_bg() -> Image.Image:
