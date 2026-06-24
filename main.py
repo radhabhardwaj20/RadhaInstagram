@@ -88,9 +88,8 @@ ACTIVE_CATEGORIES = [
     # "ego_and_patience",
 ]
 
-# ── Language mix — 60% English, 40% Hindi ────────────────────────────────────
-LANGUAGES        = ["english", "hindi"]
-LANGUAGE_WEIGHTS = [50, 50]
+LANGUAGES        = ["english"]
+LANGUAGE_WEIGHTS = [100]
 
 # ── One Krishna/devotional tag always appended (rotates to stay fresh) ────────
 KRISHNA_TAG_POOL = [

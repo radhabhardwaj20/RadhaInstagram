@@ -35,13 +35,8 @@ def _parse_quote_json(raw: str, source: str) -> dict:
 
 
 GEMINI_MIN_WORDS_EN = 20
-GEMINI_MIN_WORDS_HI = 15   # Hindi words are denser; 15 HI ~ 20 EN in content
 GROQ_MIN_WORDS      = 8    # Groq generates shorter but valid replies — don't over-filter
 ME_MIN_WORDS        = 4    # "Me:" line must be a specific micro-moment, not a 1-3 word phrase
-
-
-def _is_hindi(text: str) -> bool:
-    return bool(re.search(r"[ऀ-ॿ]", text))
 
 
 def _me_word_count(data: dict) -> tuple[int, int]:
@@ -60,8 +55,6 @@ def _krishna_word_count(data: dict, source: str) -> tuple[int, int]:
     text = re.sub(r"^Krishna:\s*", "", krishna_line, flags=re.IGNORECASE)
     if source == "groq":
         minimum = GROQ_MIN_WORDS
-    elif _is_hindi(text):
-        minimum = GEMINI_MIN_WORDS_HI
     else:
         minimum = GEMINI_MIN_WORDS_EN
     return len(text.split()), minimum
