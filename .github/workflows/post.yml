@@ -2,12 +2,14 @@ name: Post to Instagram
 
 on:
   schedule:
-    - cron: '30 1 * * *'   # 7:00 AM IST — morning window post 1
-    - cron: '0 3 * * *'    # 8:30 AM IST — morning window post 2
-    - cron: '30 6 * * *'   # 12:00 PM IST — lunch window post 1
-    - cron: '0 8 * * *'    # 1:30 PM IST — lunch window post 2
-    - cron: '0 13 * * *'   # 6:30 PM IST — evening window post 1
-    - cron: '30 15 * * *'  # 9:00 PM IST — evening window post 2
+    - cron: '30 1 * * *'   # 7:00 AM IST — morning post 1
+    - cron: '0 3 * * *'    # 8:30 AM IST — morning post 2
+    - cron: '30 6 * * *'   # 12:00 PM IST — lunch post 1
+    - cron: '0 8 * * *'    # 1:30 PM IST — lunch post 2
+    - cron: '30 9 * * *'   # 3:00 PM IST — evening slot 1 post 1
+    - cron: '0 12 * * *'   # 5:30 PM IST — evening slot 1 post 2
+    - cron: '30 14 * * *'  # 8:00 PM IST — evening slot 2 post 1
+    - cron: '0 16 * * *'   # 9:30 PM IST — evening slot 2 post 2
   workflow_dispatch:        # manual trigger from GitHub UI
 
 jobs:
