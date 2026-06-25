@@ -102,6 +102,16 @@ KRISHNA_TAG_POOL = [
     "#HareKrishna",
 ]
 
+# ── Viral reach hashtags — 5 picked randomly per post ────────────────────────
+VIRAL_TAG_POOL = [
+    "#Spirituality", "#Motivation", "#InspirationalQuotes",
+    "#DailyQuotes", "#MindsetQuotes", "#InnerPeace",
+    "#SpiritualAwakening", "#WisdomQuotes", "#LifeQuotes",
+    "#FaithQuotes", "#GodIsGood", "#DivineQuotes",
+    "#SoulQuotes", "#HinduWisdom", "#GitaWisdom",
+    "#PositiveVibes", "#Healing", "#Mindfulness",
+]
+
 CATEGORY_HISTORY    = Path("category_history.json")
 CATEGORY_NO_REPEAT  = 1   # just avoid repeating the same category back-to-back
 TEMPLATE_HISTORY    = Path("template_history.json")
@@ -240,7 +250,8 @@ def run_pipeline() -> None:
 
         # STEP 4: Compose Reel + post
         krishna_tag = random.choice(KRISHNA_TAG_POOL)
-        ig_caption = f"{data['caption']}\n\n{data['hashtags']} {krishna_tag}\n\n🌸 @krishnahasyou | Hindi page: @krishnahasyou_"
+        viral_tags = " ".join(random.sample(VIRAL_TAG_POOL, 5))
+        ig_caption = f"{data['caption']}\n\n{data['hashtags']} {krishna_tag} {viral_tags}\n\n🌸 @krishnahasyou | Hindi page: @krishnahasyou_"
         reel_path  = str(OUTPUT_DIR / f"reel_{run_id}.mp4")
 
         print("\n[4/4] Composing Reel video...")
